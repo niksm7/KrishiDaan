@@ -94,7 +94,7 @@ contract KrishiOps is Ownable {
             "Allowance is not enought"
         );
 
-        donateCoins(payment_token, _total_amount, 1);
+        donateCoins(payment_token, donor_address, _total_amount, 1);
 
         for (uint256 good_index = 0; good_index < _goods_ids.length; good_index++) {
             goods_to_availability[_goods_ids[good_index]] += _good_quantities[good_index];
@@ -189,11 +189,13 @@ contract KrishiOps is Ownable {
 
     function increaseGoodQuantity(
         uint256[] memory good_ids,
-        uint256[] memory good_qts
+        uint256[] memory good_qts,
+        uint256 new_amount_available
     ) public onlyOwner{
         for (uint256 index = 0; index < good_ids.length; index++) {
             goods_to_availability[good_ids[index]] += good_qts[index];
         }
+        available_coins = new_amount_available;
     }
 
 
@@ -211,7 +213,7 @@ contract KrishiOps is Ownable {
     }
 
 
-    function donateCoins(address payment_token, uint256 amount_of_tokens, uint256 is_internal) public{
+    function donateCoins(address payment_token, address donor_address, uint256 amount_of_tokens, uint256 is_internal) public{
         IERC20 paymentToken = IERC20(payment_token);
         require(
             paymentToken.transferFrom(
@@ -223,7 +225,16 @@ contract KrishiOps is Ownable {
         );
 
         if(is_internal != 1){
+            donors_to_total_amount_donated[donor_address] += amount_of_tokens;
             available_coins += amount_of_tokens;
+            Donations memory new_donation = Donations(
+                donation_counter,
+                donor_address,
+                "-",
+                "-",
+                amount_of_tokens
+            );
+            donors_to_donations[donor_address].push(new_donation);
         }
     }
 }
