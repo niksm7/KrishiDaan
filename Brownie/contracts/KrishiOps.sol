@@ -4,18 +4,26 @@ pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract KirshiOps is Ownable {
+contract KrishiOps is Ownable {
     uint256 private goods_counter = 777;
+    uint256 private donation_counter = 123;
+    uint256 public available_coins = 0;
+    address private contract_owner;
 
     Goods[] public all_goods;
+    Donations[] public all_donations;
 
     mapping(uint256 => Goods) public id_to_good;
     mapping(uint256 => address[]) public goods_to_farmers;
     mapping(uint256 => uint256) public goods_to_availability;
-    mapping(address => uint256[]) public donors_to_goods;
     mapping(address => uint256[]) public farmer_to_allocations;
     mapping(uint256 => uint256[2]) public good_last_farmer_index;
+    mapping(uint256 => Donations) public id_to_donations;
+    mapping(address => Donations[]) public donors_to_donations;
+    mapping(address => uint256) public donors_to_total_amount_donated;
+    mapping(uint256 => uint256) public goods_to_waiting;
 
     struct Goods {
         uint256 id;
@@ -23,6 +31,18 @@ contract KirshiOps is Ownable {
         uint256 token_amount;
         string image_uri;
         string description;
+    }
+
+    struct Donations {
+        uint256 id;
+        address donor_address;
+        string item_ids;
+        string item_qtys;
+        uint256 total_amount;
+    }
+
+    constructor(){
+        contract_owner = msg.sender;
     }
 
     function addGoods(
@@ -47,30 +67,62 @@ contract KirshiOps is Ownable {
         public
     {
         for (uint256 index = 0; index < good_ids.length; index++) {
-            if(goods_to_availability[good_ids[index]] > 0){
+            if(goods_to_availability[good_ids[index]] > 0 && goods_to_waiting[good_ids[index]]==0){
                 farmer_to_allocations[farmer_address].push(good_ids[index]);
                 goods_to_availability[good_ids[index]]--;
             }
             else{
                 goods_to_farmers[good_ids[index]].push(farmer_address);
+                goods_to_waiting[good_ids[index]]++;
             }
         }
     }
 
-    function placeDonation(address donor_address, uint256[] memory good_ids)
+    function placeDonation(address payment_token, address donor_address, uint256[] memory _goods_ids, uint256[] memory _good_quantities, string memory _str_goods_ids, string memory _str_good_quantities)
         public
     {
-        for (uint256 index = 0; index < good_ids.length; index++) {
-            donors_to_goods[donor_address].push(good_ids[index]);
-            goods_to_availability[good_ids[index]]++;
+        IERC20 paymentToken = IERC20(payment_token);
+        uint256 _total_amount = 0;
+
+        for (uint256 index = 0; index < _goods_ids.length; index++) {
+            _total_amount += (id_to_good[_goods_ids[index]].token_amount * _good_quantities[index]);
         }
+
+        require(
+            paymentToken.allowance(donor_address, address(this)) >=
+                _total_amount,
+            "Allowance is not enought"
+        );
+
+        donateCoins(payment_token, _total_amount, 1);
+
+        for (uint256 good_index = 0; good_index < _goods_ids.length; good_index++) {
+            goods_to_availability[_goods_ids[good_index]] += _good_quantities[good_index];
+        }
+
+        Donations memory new_donation = Donations(
+            donation_counter,
+            donor_address,
+            _str_goods_ids,
+            _str_good_quantities,
+            _total_amount
+        );
+
+        id_to_donations[donation_counter] = new_donation;
+        all_donations.push(new_donation);
+        donors_to_donations[donor_address].push(new_donation);
+
+        donors_to_total_amount_donated[donor_address] += _total_amount;
+
+        donation_counter++;
+
     }
 
     // Function to distribute the goods based on user donations
-    function distributeDonation(address donor_address) public onlyOwner {
-        for (uint256 good_index = 0; good_index < donors_to_goods[donor_address].length; good_index++) {
+    function distributeDonation(uint256[] memory available_goods) public onlyOwner {
+        for (uint256 good_index = 0; good_index < available_goods.length; good_index++) {
 
-            uint256 curr_good_id = donors_to_goods[donor_address][good_index];
+            uint256 curr_good_id = available_goods[good_index];
             uint256 available_good_quantity = goods_to_availability[curr_good_id];
 
             // When there is no requests
@@ -80,7 +132,7 @@ contract KirshiOps is Ownable {
             // When the available good quantity is more than requested
             else if (available_good_quantity >= goods_to_farmers[curr_good_id].length) {
                 for (uint256 farmer_index = 0; farmer_index < goods_to_farmers[curr_good_id].length; farmer_index++) {
-                    farmer_to_allocations[goods_to_farmers[curr_good_id][farmer_index]].push(good_index);
+                    farmer_to_allocations[goods_to_farmers[curr_good_id][farmer_index]].push(curr_good_id);
                     available_good_quantity--;
                 }
                 delete goods_to_farmers[curr_good_id];
@@ -111,6 +163,7 @@ contract KirshiOps is Ownable {
                     goods_to_farmers[curr_good_id].pop();
 
                     available_good_quantity--;
+                    goods_to_waiting[curr_good_id]--;
 
                     if (reverse == 0) {
                         cuur_farmer_index++;
@@ -129,10 +182,8 @@ contract KirshiOps is Ownable {
             }
 
             goods_to_availability[curr_good_id] = available_good_quantity;
-            delete donors_to_goods[donor_address][good_index];
         }
 
-        delete donors_to_goods[donor_address];
     }
 
 
@@ -145,7 +196,34 @@ contract KirshiOps is Ownable {
         }
     }
 
+
     function getAllGoods() public view returns(Goods[] memory){
         return all_goods;
+    }
+
+
+    function getAllDonations() public view returns(Donations[] memory){
+        return all_donations;
+    }
+
+    function get_donor_donations(address _donor_address) public returns(Donations[] memory){
+        return donors_to_donations[_donor_address];
+    }
+
+
+    function donateCoins(address payment_token, uint256 amount_of_tokens, uint256 is_internal) public{
+        IERC20 paymentToken = IERC20(payment_token);
+        require(
+            paymentToken.transferFrom(
+                msg.sender,
+                contract_owner,
+                amount_of_tokens
+            ),
+            "transfer Failed"
+        );
+
+        if(is_internal != 1){
+            available_coins += amount_of_tokens;
+        }
     }
 }

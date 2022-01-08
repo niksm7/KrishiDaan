@@ -1,10 +1,10 @@
-from brownie import KirshiOps, config, network
+from brownie import KrishiOps, config, network, KrishiCoin
 from scripts.helpfulScripts import getAccount
 
 
-def deploy_ops():
+def deploy_KrishiOps():
     account = getAccount()
-    deploy_tx = KirshiOps.deploy(
+    deploy_tx = KrishiOps.deploy(
         {"from": account},
         publish_source=config["networks"][network.show_active()]["verify"])
     print(deploy_tx)
@@ -12,8 +12,8 @@ def deploy_ops():
 
 def add_goods(name, token_amount, image_uri, description):
     account = getAccount()
-    KirshiOps = KirshiOps[-1]
-    add_tx = KirshiOps.addGoods(
+    KrishiOps = KrishiOps[-1]
+    add_tx = KrishiOps.addGoods(
         name,
         token_amount,
         image_uri,
@@ -26,32 +26,32 @@ def add_goods(name, token_amount, image_uri, description):
 
 def request_donation(farmer_address):
     account = getAccount()
-    KirshiOps = KirshiOps[-1]
-    request_tx = KirshiOps.requestDonation(farmer_address, [778], {"from": account})
+    KrishiOps = KrishiOps[-1]
+    request_tx = KrishiOps.requestDonation(farmer_address, [778], {"from": account})
     request_tx.wait(1)
 
 
 def place_donation(donor_address):
     account = getAccount()
-    KirshiOps = KirshiOps[-1]
-    place_tx = KirshiOps.placeDonation(donor_address, [778], {"from": account})
+    KrishiOps = KrishiOps[-1]
+    place_tx = KrishiOps.placeDonation(donor_address, [778], {"from": account})
     place_tx.wait(1)
 
 
 def distribute_donation(donor_address):
     account = getAccount()
-    KirshiOps = KirshiOps[-1]
-    distribute_tx = KirshiOps.distributeDonation(donor_address, {"from": account})
+    KrishiOps = KrishiOps[-1]
+    distribute_tx = KrishiOps.distributeDonation(donor_address, {"from": account})
     distribute_tx.wait(1)
 
 
 def get_all_goods():
-    KirshiOps = KirshiOps[-1]
-    print(KirshiOps.getAllGoods())
+    KrishiOps = KrishiOps[-1]
+    print(KrishiOps.getAllGoods())
 
 
 def main():
-    # deploy_KirshiOps()
+    deploy_KrishiOps()
 
     # add_goods("seeds", 10, "", "good quality seeds")
     # add_goods("tanker", 70, "", "water tanker")
