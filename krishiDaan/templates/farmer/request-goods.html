@@ -22,7 +22,11 @@
             <a style="color: white;" class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             <a style="color: white;" class="nav-link" href="/request/">Request<span class="sr-only">(current)</span></a>
             <a style="color: white;" class="nav-link" href="/allocations/">All Allocations</a>
+            {% if request.session.uid %}
             <a style="color: white;" class="nav-link ml-auto" href="/logout/">Logout</a>
+            {% else %}
+            <a href="/loginpage/" class="clear-cart btn btn-success ml-auto">Login/SignUp</a>
+            {% endif %}
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart (<span
                         class="total-count"></span>)</button>
                 <button class="clear-cart btn btn-danger">Clear

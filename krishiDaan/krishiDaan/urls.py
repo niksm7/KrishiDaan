@@ -7,7 +7,12 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', views.loginpage, name='loginpage'),
+    path('', views.home, name="home"),
+    path('loginpage/', views.login_page, name='login_page'),
+    path('login/', views.handleLogin, name='login'),
+    path('signupuser/', views.handleSignUpUser, name='signupuser'),
+    path('signupfarmer/', views.handleSignUpFarmer, name='signupfarmer'),
+    path('logout/', views.handleLogout, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('shop/', views.shop, name='shop'),
     path('request/', views.requestGoods, name='requestGoods'),
@@ -18,7 +23,5 @@ urlpatterns = [
     path('distribute/', views.distribute, name="distribute"),
     path('donatedgoods/', views.donatedGoods, name="donatedGoods"),
     path('donatedcoins/', views.donatedCoins, name="donatedCoins"),
-    # path('postsign/', views.postsign, name='postsign'),
-    # path('logout/', views.logout, name='logout'),
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

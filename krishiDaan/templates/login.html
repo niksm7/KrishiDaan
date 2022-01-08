@@ -1,9 +1,8 @@
-{% comment %} {% if msg %}
+{% if msg %}
 <script>
     alert('{{ msg }}');
 </script>
-{% endif %} {% endcomment %}
-
+{% endif %}
 <!DOCTYPE html>
 <html>
 
@@ -21,52 +20,51 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="/postsign/" method="POST">{% csrf_token %}
-                <h1>Create Account</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            <form action="{% url 'signupuser' %}" method="POST" id="signupForm" enctype="multipart/form-data">{% csrf_token %}
+                <h1 style="color: #064635;">Create Account</h1>
+                
+                <span>Use your email for registration</span>
+                <input type="text" placeholder="Full Name" name="fullname" required/>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <label style="color: #064635;" for="adharcard" id="labeladharcard" hidden>Upload Aadhar Card:</label>
+                <input type="file" placeholder="Aadhaar Card" name="aadhaarcard" id="aadhaarcard" hidden/>
+                <input type="text" placeholder="Farmer ID" name="farmerid" id="farmerid" hidden/>
+                <input type="text" placeholder="Account Address" name="accadd" id="accadd" hidden/>
+                <div style="width: 80%;padding: 12px">
+                    <label for="is_farmer" style="color: #064635;">Are you a Farmer?</label>
+                    <input type="checkbox" style="width: 24% !important;padding-top: 0px !important;margin-top: 2px !important;" name="is_farmer" id="is_farmer" onclick="farmer_details()"/>
                 </div>
-                <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <button>Sign Up</button>
+                <button style="background-color: #F0BB62;border:#F0BB62" type="submit">Sign Up</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="/postsign/" method="POST">{% csrf_token %}
-                <h1>Sign in</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your account</span>
-                <input type="email" placeholder="Email" name="email" />
-                <input type="password" placeholder="Password" name="password" />
-                <a href="#">Forgot your password?</a>
-                <button>Sign In</button>
+            <form action="{% url 'login' %}" method="POST">{% csrf_token %}
+                <h1 style="color: #064635;">Sign in</h1>
+                <input type="email" placeholder="Email" name="email" required/>
+                <input type="password" placeholder="Password" name="password" required/>
+                <button style="background-color: #F0BB62;border:#F0BB62">Sign In</button>
             </form>
         </div>
         <div class="overlay-container">
-            <div class="overlay">
+            <div class="overlay" style="background: #064635;">
                 <div class="overlay-panel overlay-left">
                     <h1>Welcome Back!</h1>
                     <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <button style="background-color: #F0BB62;" class="ghost" id="signIn">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
                     <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                    <button style="background-color: #F0BB62;" class="ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="/media/js/login.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </body>
 
 </html>
