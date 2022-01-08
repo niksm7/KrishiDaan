@@ -14,6 +14,7 @@
     <!-- Font Awesome CSS -->
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
     <link rel="stylesheet" href="/media/css/profile.css">
+    <link rel="stylesheet" href="/media/css/loader.css">
     <style>
         table,
         th,
@@ -27,20 +28,20 @@
 
 <body>
 
-    <div class="student-profile py-4">
+    <div class="student-profile py-4" id="main_container">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent text-center">
                             <img class="profile_img" src="/media/images/ac.png" alt="student dp">
-                            <h3><span>Krishi Coin : </span><span>41.00 KC</span></h3>
+                            <h3><span>Krishi Coin : </span><span id="balance_amount">0.00</span> KC</h3>
                         </div>
                         <div class="card-body">
-                            <p class="mb-0"><strong class="pr-1">Amount can be withdrawn:</strong>890 KC</p>
-                            <p class="mb-0"><strong class="pr-1">Refresh Balance</strong><img
-                                    src="https://img.icons8.com/ios-glyphs/30/000000/refresh--v1.png" /></p>
-                            <p class="mb-0"><strong class="pr-1"><button>Withdraw</button></strong></p>
+                            <p class="mb-0"><a style="cursor: pointer;" onclick="refresh_balance()">Refresh Balance <i class="fa fa-fw fa-history" aria-hidden="true"></i></a></p>
+                            <button type="button" class="btn" style="background-color: #F0BB62;color:white" data-toggle="modal" data-target="#exampleModal">
+                                        Get Coins
+                                      </button>
                         </div>
                     </div>
                 </div>
@@ -64,11 +65,61 @@
                                 <tr>
                                     <th width="30%">Account Connected</th>
                                     <td width="2%">:</td>
-                                    <td>0x5B38Da6a701c568545dCfcB03FcB875f56beddC4</td>
+                                    <td id="curr_user_account"></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
+
+                    <div style="height: 26px"></div>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Buy Tokens</h3>
+                        </div>
+                        <div class="card-body pt-0">
+
+                            <div class="route" id="buy"></div>
+                            <section class="giftcard">
+                                <section class="giftcard-cover">
+                                    <i class="fa fa-apple"></i>
+                                </section>
+                                <div class="giftcard-content">
+                                    <h2>Your tokens are purchased</h2>
+                                    <address>
+                                        <h3>View Order</h3>
+                                        <a href="https://www.github.com/davidkpiano" target="_blank">www.github.com</a>
+                                    </address>
+                                </div>
+                                <footer class="giftcard-footer">
+                                    <div class="giftcard-text">
+                                        <h1>Krishi Coins</h1>
+                                        <input type="text" name="donate_coins" id="donate_coins" placeholder="Enter number of coins">
+                                    </div>
+                                    <div class="ribbon">
+                                        <div class="giftwrap">
+                                            <a href="javascript:void(0);" onclick="place_donation()" class="button">Donate Coins</a>
+                                        </div>
+                                        <div class="bow">
+                                            <i class="fa fa-bookmark"></i>
+                                            <i class="fa fa-bookmark"></i>
+                                        </div>
+                                    </div>
+                                    <div class="giftcard-info">
+                                        <div>
+                                            <input type="text" name="" id="" placeholder="Type your queries(if any)" />
+                                        </div>
+                                        <div>
+                                            <a href="#" class="button secondary">Ask</a>
+                                        </div>
+                                    </div>
+                                </footer>
+                            </section>
+
+
+
+                        </div>
+                    </div>
+
                     <div style="height: 26px"></div>
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent border-0">
@@ -98,61 +149,49 @@
                         </div>
                     </div>
 
-                    <div style="height: 26px"></div>
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Buy Tokens</h3>
-                        </div>
-                        <div class="card-body pt-0">
-
-                            <div class="route" id="buy"></div>
-                            <section class="giftcard">
-                                <section class="giftcard-cover">
-                                    <i class="fa fa-apple"></i>
-                                </section>
-                                <div class="giftcard-content">
-                                    <h2>Your tokens are purchased</h2>
-                                    <address>
-                                        <h3>View Order</h3>
-                                        <a href="https://www.github.com/davidkpiano" target="_blank">www.github.com</a>
-                                    </address>
-                                </div>
-                                <footer class="giftcard-footer">
-                                    <div class="giftcard-text">
-                                        <h1>Krishi Coins</h1>
-                                        <h2>25.00</h2>
-                                    </div>
-                                    <div class="ribbon">
-                                        <div class="giftwrap">
-                                            <a href="#buy" class="button">Buy</a>
-                                        </div>
-                                        <div class="bow">
-                                            <i class="fa fa-bookmark"></i>
-                                            <i class="fa fa-bookmark"></i>
-                                        </div>
-                                    </div>
-                                    <div class="giftcard-info">
-                                        <div>
-                                            <input type="text" name="" id="" placeholder="Type your queries(if any)" />
-                                        </div>
-                                        <div>
-                                            <a href="#" class="button secondary">Ask</a>
-                                        </div>
-                                    </div>
-                                </footer>
-                            </section>
-
-
-
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Get Krishi Coins</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="number" name="" id="token_num" placeholder="Enter the number of tokens"><br>
+              <small>1 Token = 10 Rs</small>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" onclick="getTokens()" class="btn btn-primary">Purchase</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="content" id="loader_container" hidden>
+        <div class="loading">
+            <p id="loader_text">loading</p>
+            <span></span>
+        </div>
+    </div>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+      crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+      <script src="/media/js/user-profile.js"></script>
 </body>
 
 </html>

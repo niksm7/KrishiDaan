@@ -9,22 +9,24 @@ var shoppingCart = (function() {
     cart = [];
     
     // Constructor
-    function Item(name, price, count) {
+    function Item(name, price, count, good_id) {
       this.name = name;
       this.price = price;
       this.count = count;
+      this.good_id = good_id;
     }
     
     // Save cart
     function saveCart() {
+      localStorage.setItem('shoppingCart', JSON.stringify(cart))
       sessionStorage.setItem('shoppingCart', JSON.stringify(cart));
     }
     
       // Load cart
     function loadCart() {
-      cart = JSON.parse(sessionStorage.getItem('shoppingCart'));
+      cart = JSON.parse(localStorage.getItem('shoppingCart'));
     }
-    if (sessionStorage.getItem("shoppingCart") != null) {
+    if (localStorage.getItem("shoppingCart") != null) {
       loadCart();
     }
     
@@ -35,7 +37,7 @@ var shoppingCart = (function() {
     var obj = {};
     
     // Add to cart
-    obj.addItemToCart = function(name, price, count) {
+    obj.addItemToCart = function(name, price, count, good_id) {
       for(var item in cart) {
         if(cart[item].name === name) {
           cart[item].count ++;
@@ -43,7 +45,7 @@ var shoppingCart = (function() {
           return;
         }
       }
-      var item = new Item(name, price, count);
+      var item = new Item(name, price, count, good_id);
       cart.push(item);
       saveCart();
     }
@@ -144,7 +146,8 @@ var shoppingCart = (function() {
     event.preventDefault();
     var name = $(this).data('name');
     var price = Number($(this).data('price'));
-    shoppingCart.addItemToCart(name, price, 1);
+    var good_id = Number($(this).data('goodid'))
+    shoppingCart.addItemToCart(name, price, 1, good_id);
     displayCart();
   });
   
@@ -161,17 +164,17 @@ var shoppingCart = (function() {
     for(var i in cartArray) {
       output += "<tr>"
         + "<td>" + cartArray[i].name + "</td>" 
-        + "<td>(" + cartArray[i].price + ")</td>"
+        + "<td>(" + cartArray[i].price / (10**18) + ")</td>"
         + "<td><div class='input-group'><button class='minus-item input-group-addon btn btn-primary' data-name=" + cartArray[i].name + ">-</button>"
         + "<input type='number' class='item-count form-control' data-name='" + cartArray[i].name + "' value='" + cartArray[i].count + "'>"
         + "<button class='plus-item btn btn-primary input-group-addon' data-name=" + cartArray[i].name + ">+</button></div></td>"
         + "<td><button class='delete-item btn btn-danger' data-name=" + cartArray[i].name + ">X</button></td>"
         + " = " 
-        + "<td>" + cartArray[i].total + "</td>" 
+        + "<td>" + cartArray[i].total / (10**18) + "</td>" 
         +  "</tr>";
     }
     $('.show-cart').html(output);
-    $('.total-cart').html(shoppingCart.totalCart());
+    $('.total-cart').html(shoppingCart.totalCart() / (10**18));
     $('.total-count').html(shoppingCart.totalCount());
   }
   
@@ -206,4 +209,23 @@ var shoppingCart = (function() {
   });
   
   displayCart();
+
+
+function requestGoods(){
+  cart = JSON.parse(localStorage.getItem('shoppingCart'))
+  var good_ids = []
+  for(var item in cart){
+    good_ids.push(cart[item]["good_id"])
+  }
+  $.ajax({
+    url: "/placerequestgoods/",
+    dataType: "json",
+    data: {
+      "good_ids": JSON.stringify(good_ids)
+    },
+    success: function (data) {
+      console.log(data.sucess)
+    }
+});
+}
   

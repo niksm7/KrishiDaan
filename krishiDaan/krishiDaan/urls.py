@@ -14,6 +14,8 @@ urlpatterns = [
     path('request/', views.requestGoods, name='requestGoods'),
     path('pending/', views.pendingRequest, name='pendingRequest'),
     path('allocations/', views.allocatedGoods, name='allocatedGoods'),
+    path('addgoods/', views.addGoods, name="addGoods"),
+    path('placerequestgoods/', views.placeRequestGoods, name="placeRequestGoods")
     # path('postsign/', views.postsign, name='postsign'),
     # path('logout/', views.logout, name='logout'),
     
