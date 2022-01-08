@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
         integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="/media/css/shop.css">
+    <link rel="stylesheet" href="/media/css/loader.css">
 </head>
 
 <body>
@@ -26,82 +27,18 @@
 
 
     <!-- Main -->
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/tractor.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Tractor</h4>
-                        <p class="card-text">Price: ₹20000</p>
-                        <a href="#" data-name="Tractor" data-goodid="777" data-price="20000" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top"
-                        src="/media/images/cow.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Cow</h4>
-                        <p class="card-text">Price: ₹3500</p>
-                        <a href="#" data-name="Cow" data-goodid="778" data-price="3500" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/water.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Water</h4>
-                        <p class="card-text">Price: ₹2500</p>
-                        <a href="#" data-name="Water" data-price="2500" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/fertilizers.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Fertilizers</h4>
-                        <p class="card-text">Price: ₹870</p>
-                        <a href="#" data-name="Fertilizers" data-price="870" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/bullock-cart.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Bullock Cart</h4>
-                        <p class="card-text">Price: ₹200</p>
-                        <a href="#" data-name="Bullock Cart" data-price="200" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/rice.png"
-                        alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Rice</h4>
-                        <p class="card-text">Price: ₹500</p>
-                        <a href="#" data-name="Rice" data-price="500" class="add-to-cart btn btn-primary">Request</a>
-                    </div>
-                </div>
-            </div>
+    <div class="container" id="main_container">
+        <div class="row" id="goods_row">
 
         </div>
     </div>
+
+    <div class="content" id="loader_container" hidden>
+        <div class="loading">
+           <p id="loader_text">loading</p>
+           <span></span>
+        </div>
+     </div>
 
 
     <!-- Modal -->
@@ -130,8 +67,6 @@
     </div>
 
 
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
@@ -141,6 +76,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
         integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="/media/js/request-shop.js"></script>
     <script src="/media/js/shop.js"></script>
 </body>
 

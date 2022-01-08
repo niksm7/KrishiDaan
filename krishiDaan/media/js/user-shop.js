@@ -21,6 +21,7 @@ $.ajax({
     success: function (data) {
         operations_contract = new web.eth.Contract(JSON.parse(data.result), address_operations)
         localStorage.setItem('operations_contract', JSON.stringify([JSON.parse(data.result), address_operations]))
+        display_goods()
     }
 });
 
@@ -49,6 +50,40 @@ window.addEventListener('load', async () => {
 })
 
 
+function donationBackend(hash, all_good_ids){
+    $("#loader_text").text("Donating")
+    web.eth.getTransactionReceipt(hash, async function (err, receipt) {
+        if (err) {
+            console.log(err)
+        }
+
+        if (receipt !== null) {
+            try {
+                good_ids = JSON.parse(all_good_ids)
+                $.ajax({
+                    url: "/donatedgoods/",
+                    dataType: "json",
+                    data:{
+                        "good_ids": all_good_ids
+                    },
+                    success: function (data) {
+                        document.getElementById("loader_container").hidden = true
+                        document.getElementById("main_container").hidden = false
+                    }
+                });
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            // Try again in 1 second
+            window.setTimeout(function () {
+                donationBackend(hash, all_good_ids);
+            }, 1000);
+        }
+    });
+}
+
+
 function payForOrder(hash, all_good_ids, all_good_qtys) {
     document.getElementById("loader_container").hidden = false
     document.getElementById("main_container").hidden = true
@@ -62,11 +97,9 @@ function payForOrder(hash, all_good_ids, all_good_qtys) {
             try {
                 good_ids = JSON.parse(all_good_ids)
                 good_qtys = JSON.parse(all_good_qtys)
-                transaction2 = operations_contract.methods.placeDonation(address_coin, current_user_account, good_ids, good_qtys)
+                transaction2 = operations_contract.methods.placeDonation(address_coin, current_user_account, good_ids, good_qtys, all_good_ids, all_good_qtys)
                 tx2 = await send(transaction2)
-                document.getElementById("loader_container").hidden = true
-                document.getElementById("main_container").hidden = false
-                // Give user the nfts
+                donationBackend(tx2,all_good_ids)
             } catch (e) {
                 console.log(e)
             }
@@ -122,4 +155,32 @@ async function place_donation(){
     transaction1 = token_contract.methods.approve(address_operations, confirmed_total)
     tx = await send(transaction1)
     payForOrder(tx.toString(), JSON.stringify(good_ids), JSON.stringify(good_qtys))
+}
+
+async function display_goods() {
+    var all_goods = await operations_contract.methods.getAllGoods().call();
+    for(var good in all_goods){
+        $("#goods_row").append(`
+        <div class="col">
+            <div class="card" style="width: 20rem;">
+                <img class="card-img-top" src="${all_goods[good]["image_uri"]}"
+                    alt="Card image cap">
+                <div class="card-block">
+                    <h4 class="card-title">${all_goods[good]["name"]}</h4>
+                    <p class="card-text">Price: ${all_goods[good]["token_amount"] / (10**18)}</p>
+                    <a href="#" data-name="${all_goods[good]["name"]}" data-goodid="${all_goods[good]["id"]}" data-price="${all_goods[good]["token_amount"]}" class="add-to-cart btn btn-primary">Add to
+                        cart</a>
+                </div>
+            </div>
+        </div>
+        `)
+    }
+    $('.add-to-cart').click(function(event) {
+        event.preventDefault();
+        var name = $(this).data('name');
+        var price = Number($(this).data('price'));
+        var good_id = Number($(this).data('goodid'))
+        shoppingCart.addItemToCart(name, price, 1, good_id);
+        displayCart();
+    });
 }

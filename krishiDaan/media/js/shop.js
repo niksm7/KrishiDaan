@@ -217,15 +217,18 @@ function requestGoods(){
   for(var item in cart){
     good_ids.push(cart[item]["good_id"])
   }
+  document.getElementById("loader_container").hidden = false
+  document.getElementById("main_container").hidden = true
+  $("#loader_text").text("Requesting")
   $.ajax({
-    url: "/placerequestgoods/",
-    dataType: "json",
-    data: {
-      "good_ids": JSON.stringify(good_ids)
-    },
-    success: function (data) {
-      console.log(data.sucess)
-    }
-});
+      url: "/placerequestgoods/",
+      dataType: "json",
+      data: {
+        "good_ids": JSON.stringify(good_ids)
+      },
+      success: function (data) {
+        document.getElementById("loader_container").hidden = true
+      document.getElementById("main_container").hidden = false
+      }
+  });
 }
-  

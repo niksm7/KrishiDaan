@@ -15,9 +15,12 @@ urlpatterns = [
     path('pending/', views.pendingRequest, name='pendingRequest'),
     path('allocations/', views.allocatedGoods, name='allocatedGoods'),
     path('addgoods/', views.addGoods, name="addGoods"),
-    path('placerequestgoods/', views.placeRequestGoods, name="placeRequestGoods")
+    path('placerequestgoods/', views.placeRequestGoods, name="placeRequestGoods"),
+    path('adminhome/', views.adminHome, name="adminHome"),
+    path('distribute/', views.distribute, name="distribute"),
+    path('donatedgoods/', views.donatedGoods, name="donatedGoods"),
+    path('donatedcoins/', views.donatedCoins, name="donatedCoins"),
     # path('postsign/', views.postsign, name='postsign'),
     # path('logout/', views.logout, name='logout'),
-    
 
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

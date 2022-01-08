@@ -12,7 +12,7 @@ window.addEventListener('load', async () => {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             current_user_account = accounts[0]
             $("#curr_user_account").text(current_user_account)
-            refresh_balance()
+            refresh_account()
         } catch (error) {
             if (error.code === 4001) {
                 // User rejected request
@@ -23,7 +23,7 @@ window.addEventListener('load', async () => {
         window.ethereum.on('accountsChanged', (accounts) => {
             current_user_account = accounts[0]
             $("#curr_user_account").text(current_user_account)
-            refresh_balance()
+            refresh_account()
         });
 
     } else {
@@ -34,10 +34,43 @@ window.addEventListener('load', async () => {
 })
 
 
+function coin_backend(hash, total_amount){
+    web.eth.getTransactionReceipt(hash, async function (err, receipt) {
+        if (err) {
+            console.log(err)
+        }
+
+        if (receipt !== null) {
+            document.getElementById("loader_container").hidden = true
+            document.getElementById("main_container").hidden = false
+            try {
+                $.ajax({
+                    url: "/donatedcoins/",
+                    dataType: "json",
+                    data:{
+                        "total_amount_coins": total_amount
+                    },
+                    success: function (data) {
+                        console.log("success")
+                    }
+                });
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            // Try again in 1 second
+            window.setTimeout(function () {
+                coin_backend(hash, total_amount);
+            }, 1000);
+        }
+    });
+}
+
+
 function payOnlyCoins(hash, total_amount) {
     document.getElementById("loader_container").hidden = false
     document.getElementById("main_container").hidden = true
-    $("#loader_text").text("Donating")
+    $("#loader_text").text("Approving")
     web.eth.getTransactionReceipt(hash, async function (err, receipt) {
         if (err) {
             console.log(err)
@@ -45,10 +78,10 @@ function payOnlyCoins(hash, total_amount) {
 
         if (receipt !== null) {
             try {
+                $("#loader_text").text("Donating")
                 transaction2 = operations_contract.methods.donateCoins(token_contract_details[1], total_amount.toString(), 0)
                 tx2 = await send(transaction2)
-                document.getElementById("loader_container").hidden = true
-                document.getElementById("main_container").hidden = false
+                coin_backend(hash, total_amount)
             } catch (e) {
                 console.log(e)
             }
@@ -94,9 +127,25 @@ function getTokens() {
     });
 }
 
-async function refresh_balance(){
+async function refresh_account(){
     var curr_balance = await token_contract.methods.balanceOf(current_user_account).call()
+    var donated_amount = await operations_contract.methods.donors_to_total_amount_donated(current_user_account).call()
+
+    all_donations = await operations_contract.methods.get_donor_donations(current_user_account).call()
+
     $("#balance_amount").text(curr_balance / (10**18))
+    $("#donated_amount").text(donated_amount / (10**18))
+
+    for(var donation in all_donations){
+        $("#donations_table").append(`
+            <tr>
+                <td>${all_donations[donation]["id"]}</td>
+                <td>${all_donations[donation]["item_ids"]}</td>
+                <td>${all_donations[donation]["item_qtys"]}</td>
+                <td>${all_donations[donation]["total_amount"] / (10**18)}</td>
+            </tr>
+        `)
+    }
 }
 
 async function place_donation(){
