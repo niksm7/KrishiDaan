@@ -79,7 +79,7 @@ function payOnlyCoins(hash, total_amount) {
         if (receipt !== null) {
             try {
                 $("#loader_text").text("Donating")
-                transaction2 = operations_contract.methods.donateCoins(token_contract_details[1], total_amount.toString(), 0)
+                transaction2 = operations_contract.methods.donateCoins(token_contract_details[1], current_user_account, total_amount.toString(), 0)
                 tx2 = await send(transaction2)
                 coin_backend(hash, total_amount)
             } catch (e) {

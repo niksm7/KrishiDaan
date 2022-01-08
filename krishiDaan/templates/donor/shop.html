@@ -16,12 +16,17 @@
 <body>
 
     <!-- Nav -->
-    <nav class="navbar navbar-inverse bg-inverse fixed-top bg-faded">
+    <nav class="navbar bg-inverse fixed-top bg-faded" style="background-color: #364E51 !important;">
         <div class="row">
-            <div class="col">
+            <a class="navbar-brand" style="padding:0px !important" href="/"><img style="width: 80px;" src="/media/images/main-logo.png" alt=""></a>
+            <a style="color: white;" class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            <a style="color: white;" class="nav-link" href="/shop/">Shop <span class="sr-only">(current)</span></a>
+            <a style="color: white;" class="nav-link" href="/profile/">Profile</a>
+            <a style="color: white;" class="nav-link ml-auto" href="/logout/">Logout</a>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart (<span
-                        class="total-count"></span>)</button><button class="clear-cart btn btn-danger">Clear
-                    Cart</button></div>
+                        class="total-count"></span>)</button>
+                <button class="clear-cart btn btn-danger">Clear
+                    Cart</button>
         </div>
     </nav>
 

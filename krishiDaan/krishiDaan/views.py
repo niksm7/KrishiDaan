@@ -33,13 +33,6 @@ def profile(request):
     return render(request, 'profile.html')
 
 
-def pendingRequest(request):
-    return render(request, 'farmer/pending-req.html')
-
-
-def donations(request):
-    return render(request, 'donor/donations.html')
-
 
 def allocatedGoods(request):
     return render(request, 'farmer/allocated-goods.html')
