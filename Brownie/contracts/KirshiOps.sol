@@ -15,7 +15,7 @@ contract KirshiOps is Ownable {
     mapping(uint256 => uint256) public goods_to_availability;
     mapping(address => uint256[]) public donors_to_goods;
     mapping(address => uint256[]) public farmer_to_allocations;
-    mapping(uint256 => uint256[]) public good_last_farmer_index;
+    mapping(uint256 => uint256[2]) public good_last_farmer_index;
 
     struct Goods {
         uint256 id;
@@ -102,7 +102,7 @@ contract KirshiOps is Ownable {
                 }
 
                 while (available_good_quantity != 0) {
-                    farmer_to_allocations[goods_to_farmers[curr_good_id][cuur_farmer_index]].push(good_index);
+                    farmer_to_allocations[goods_to_farmers[curr_good_id][cuur_farmer_index]].push(curr_good_id);
 
                     // Swap the allocated farmer with last member
                     goods_to_farmers[curr_good_id][cuur_farmer_index] = goods_to_farmers[curr_good_id][goods_to_farmers[curr_good_id].length - 1];
@@ -133,5 +133,19 @@ contract KirshiOps is Ownable {
         }
 
         delete donors_to_goods[donor_address];
+    }
+
+
+    function increaseGoodQuantity(
+        uint256[] memory good_ids,
+        uint256[] memory good_qts
+    ) public onlyOwner{
+        for (uint256 index = 0; index < good_ids.length; index++) {
+            goods_to_availability[good_ids[index]] += good_qts[index];
+        }
+    }
+
+    function getAllGoods() public view returns(Goods[] memory){
+        return all_goods;
     }
 }
