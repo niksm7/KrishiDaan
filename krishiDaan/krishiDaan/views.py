@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect
-import pyrebase
-from django.contrib import auth
 
 
 def loginpage(request):
@@ -8,3 +6,15 @@ def loginpage(request):
 
 def shop(request):
   return render(request,'shop.html') 
+
+def requestGoods(request):
+  return render(request,'request-goods.html') 
+
+def donorProfile(request):
+  return render(request,'donor-profile.html') 
+
+def pendingRequest(request):
+  return render(request,'pending-req.html') 
+
+def donations(request):
+  return render(request,'donations.html') 

@@ -24,6 +24,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.loginpage, name='loginpage'),
     path('shop/', views.shop, name='shop'),
+    path('request/', views.requestGoods, name='requestGoods'),
+    path('profile/', views.donorProfile, name='donorProfile'),
+    path('pending/', views.pendingRequest, name='pendingRequest'),
+    path('donations/', views.donations, name='donations'),
     # path('postsign/', views.postsign, name='postsign'),
     # path('logout/', views.logout, name='logout'),
     
