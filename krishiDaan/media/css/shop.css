@@ -13,3 +13,7 @@ body {
     height: 200px;
     align-self: center;
   }
+
+.pull-left {float:left;}
+.pull-right {float:right;}
+.pull-center {float:center;}
