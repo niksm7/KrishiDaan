@@ -18,7 +18,8 @@ contract KrishiOps is Ownable {
     mapping(uint256 => Goods) public id_to_good;
     mapping(uint256 => address[]) public goods_to_farmers;
     mapping(uint256 => uint256) public goods_to_availability;
-    mapping(address => uint256[]) public farmer_to_allocations;
+    mapping(address => Goods[]) public farmer_to_allocations;
+    mapping(address => mapping(uint256 => uint256)) public farmer_to_allocations_quantities;
     mapping(uint256 => uint256[2]) public good_last_farmer_index;
     mapping(uint256 => Donations) public id_to_donations;
     mapping(address => Donations[]) public donors_to_donations;
@@ -68,7 +69,8 @@ contract KrishiOps is Ownable {
     {
         for (uint256 index = 0; index < good_ids.length; index++) {
             if(goods_to_availability[good_ids[index]] > 0 && goods_to_waiting[good_ids[index]]==0){
-                farmer_to_allocations[farmer_address].push(good_ids[index]);
+                farmer_to_allocations[farmer_address].push(id_to_good[good_ids[index]]);
+                farmer_to_allocations_quantities[farmer_address][good_ids[index]]++;
                 goods_to_availability[good_ids[index]]--;
             }
             else{
@@ -132,7 +134,8 @@ contract KrishiOps is Ownable {
             // When the available good quantity is more than requested
             else if (available_good_quantity >= goods_to_farmers[curr_good_id].length) {
                 for (uint256 farmer_index = 0; farmer_index < goods_to_farmers[curr_good_id].length; farmer_index++) {
-                    farmer_to_allocations[goods_to_farmers[curr_good_id][farmer_index]].push(curr_good_id);
+                    farmer_to_allocations[goods_to_farmers[curr_good_id][farmer_index]].push(id_to_good[curr_good_id]);
+                    farmer_to_allocations_quantities[goods_to_farmers[curr_good_id][farmer_index]][curr_good_id]++;
                     available_good_quantity--;
                 }
                 delete goods_to_farmers[curr_good_id];
@@ -154,7 +157,9 @@ contract KrishiOps is Ownable {
                 }
 
                 while (available_good_quantity != 0) {
-                    farmer_to_allocations[goods_to_farmers[curr_good_id][cuur_farmer_index]].push(curr_good_id);
+                    farmer_to_allocations[goods_to_farmers[curr_good_id][cuur_farmer_index]].push(id_to_good[curr_good_id]);
+
+                    farmer_to_allocations_quantities[goods_to_farmers[curr_good_id][cuur_farmer_index]][curr_good_id]++;
 
                     // Swap the allocated farmer with last member
                     goods_to_farmers[curr_good_id][cuur_farmer_index] = goods_to_farmers[curr_good_id][goods_to_farmers[curr_good_id].length - 1];
@@ -208,7 +213,11 @@ contract KrishiOps is Ownable {
         return all_donations;
     }
 
-    function get_donor_donations(address _donor_address) public returns(Donations[] memory){
+    function getFarmerAllocations(address _farmer_address) public view returns(Goods[] memory){
+        return farmer_to_allocations[_farmer_address];
+    }
+
+    function get_donor_donations(address _donor_address) public view returns(Donations[] memory){
         return donors_to_donations[_donor_address];
     }
 

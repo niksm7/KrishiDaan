@@ -21,7 +21,7 @@ contract KrishiCoin is ERC20, ChainlinkClient, Ownable {
     mapping(bytes32 => address) public requestId_toSender;
     mapping(address => uint256) public address_to_ethgiven;
 
-    constructor(uint256 initialSupply) ERC20("CoinX", "CC") {
+    constructor(uint256 initialSupply) ERC20("Krishi Coin", "KC") {
         _mint(msg.sender, initialSupply);
         _approve(msg.sender, address(this), initialSupply);
         curr_owner = msg.sender;
