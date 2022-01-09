@@ -9,7 +9,8 @@ async function display_goods() {
     for(var good in all_goods){
         var waiting = await operations_contract.methods.goods_to_waiting(all_goods[good]["id"]).call()
         var availability = await operations_contract.methods.goods_to_availability(all_goods[good]["id"]).call()
-        if(waiting == 0){
+        console.log(waiting, availability)
+        if(waiting <= availability){
             if(availability > 0){
                 waiting = "Available!"
             }

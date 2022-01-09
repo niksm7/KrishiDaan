@@ -59,7 +59,8 @@ def requestGoods(request):
 
 def profile(request):
     if request.session.get('uid') is not None:
-        return render(request, 'profile.html')
+        user = WebUser.objects.filter(id=request.session['uid'])[0]
+        return render(request, 'profile.html', {"user_name": user.full_name})
     return HttpResponse('Unauthorized', status=401)
 
 
@@ -91,7 +92,7 @@ def addGoods(request):
             operation_tx = operations_contract.functions.addGoods(name, token_amount, image_uri, description).buildTransaction({
                 'chainId': 4,
                 'gas': 7000000,
-                'gasPrice': web.toHex((10**11)),
+                'gasPrice': web.toHex((10**10)),
                 'nonce': nonce,
                 })
             signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
@@ -111,7 +112,7 @@ def placeRequestGoods(request):
     operation_tx = operations_contract.functions.requestDonation(farmer_address, good_ids).buildTransaction({
         'chainId': 4,
         'gas': 7000000,
-        'gasPrice': web.toHex((10**11)),
+        'gasPrice': web.toHex((10**10)),
         'nonce': nonce,
         })
     signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
@@ -170,7 +171,7 @@ def donatedCoins(request):
     operation_tx = operations_contract.functions.increaseGoodQuantity(good_ids, good_qts, total_amount_coins).buildTransaction({
         'chainId': 4,
         'gas': 7000000,
-        'gasPrice': web.toHex((10**11)),
+        'gasPrice': web.toHex((10**10)),
         'nonce': nonce,
         })
     signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
@@ -186,7 +187,7 @@ def distributeGoods():
     operation_tx = operations_contract.functions.distributeDonation(available_goods).buildTransaction({
         'chainId': 4,
         'gas': 7000000,
-        'gasPrice': web.toHex((10**11)),
+        'gasPrice': web.toHex((10**10)),
         'nonce': nonce,
         })
     signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
