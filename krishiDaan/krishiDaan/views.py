@@ -59,46 +59,48 @@ def requestGoods(request):
 
 def profile(request):
     if request.session.get('uid') is not None:
-        user = WebUser.objects.filter(id=request.session['uid'])[0]
-        if user.group.name != "Farmer":
-            return render(request, 'profile.html')
+        return render(request, 'profile.html')
     return HttpResponse('Unauthorized', status=401)
 
 
 def allocatedGoods(request):
     if request.session.get('uid') is not None:
         user = WebUser.objects.filter(id=request.session['uid'])[0]
-        if user.group.name == "Farmer": 
-            return render(request, 'farmer/allocated-goods.html')
+        if user.group.name == "Farmer":
+            return render(request, 'farmer/allocated-goods.html', {"farmer_address": json.dumps(user.account_address)})
     return HttpResponse('Unauthorized', status=401)
 
 
 def adminHome(request):
-    return render(request, 'admin-home.html')
+    if request.user.is_superuser:
+        return render(request, 'admin-home.html')
+    return HttpResponse('Unauthorized', status=401)
 
 
 def addGoods(request):
-    if request.method == "POST":
-        name = request.POST.get("good_name")
-        token_amount = int((float(request.POST.get("good_price")))*(10**18))
-        image = request.FILES.get("good_image")
-        description = request.POST.get("good_desc")
+    if request.user.is_superuser:
+        if request.method == "POST":
+            name = request.POST.get("good_name")
+            token_amount = int((float(request.POST.get("good_price")))*(10**18))
+            image = request.FILES.get("good_image")
+            description = request.POST.get("good_desc")
 
-        image_uri = upload_to_ipfs(image)
+            image_uri = upload_to_ipfs(image)
 
-        nonce = web.eth.get_transaction_count(web.toChecksumAddress(web.eth.default_account))
-        operation_tx = operations_contract.functions.addGoods(name, token_amount, image_uri, description).buildTransaction({
-            'chainId': 4,
-            'gas': 7000000,
-            'gasPrice': web.toHex((10**11)),
-            'nonce': nonce,
-            })
-        signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
-        receipt = web.eth.send_raw_transaction(signed_tx.rawTransaction)
-        web.eth.wait_for_transaction_receipt(receipt)
-        print("Good will be added soon!")
+            nonce = web.eth.get_transaction_count(web.toChecksumAddress(web.eth.default_account))
+            operation_tx = operations_contract.functions.addGoods(name, token_amount, image_uri, description).buildTransaction({
+                'chainId': 4,
+                'gas': 7000000,
+                'gasPrice': web.toHex((10**11)),
+                'nonce': nonce,
+                })
+            signed_tx = web.eth.account.sign_transaction(operation_tx, private_key=os.getenv("PRIVATE_KEY"))
+            receipt = web.eth.send_raw_transaction(signed_tx.rawTransaction)
+            web.eth.wait_for_transaction_receipt(receipt)
+            print("Good will be added soon!")
 
-    return render(request, "addItem.html")
+        return render(request, "addItem.html")
+    return HttpResponse('Unauthorized', status=401)
 
 
 def placeRequestGoods(request):
@@ -224,7 +226,7 @@ def handleLogin(request):
         request.session['email'] = email
         request.session['usrname'] = email.split("@")[0]
         request.session['uid'] = str(session_id)
-    return HttpResponseRedirect(reverse("home"))
+    return HttpResponseRedirect(reverse("login_page"))
 
 
 def handleSignUpUser(request):

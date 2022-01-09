@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/media/css/loader.css">
 </head>
 
-<body>
+<body style="background-color: #F5F5F5;">
 
     <!-- Nav -->
     <nav class="navbar bg-inverse fixed-top bg-faded" style="background-color: #364E51 !important;">
@@ -25,9 +25,9 @@
             {% if request.session.uid %}
             <a style="color: white;" class="nav-link ml-auto" href="/logout/">Logout</a>
             {% else %}
-            <a href="/loginpage/" class="clear-cart btn btn-success ml-auto">Login/SignUp</a>
+            <a href="/loginpage/" class="clear-cart btn btn-success ml-auto" style="background-color: #FFFFDD;color:black;margin-right:10px">Login/SignUp</a>
             {% endif %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart (<span
+                <button type="button" class="btn " data-toggle="modal" data-target="#cart" style="background-color:#84A98C; color:white;margin-right:10px">Cart (<span
                         class="total-count"></span>)</button>
                 <button class="clear-cart btn btn-danger">Clear
                     Cart</button>
@@ -65,7 +65,7 @@
                     <table class="show-cart table">
 
                     </table>
-                    <div>Total price: ₹<span class="total-cart"></span></div>
+                    <div>Total price: KC <span class="total-cart"></span></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

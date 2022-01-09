@@ -23,14 +23,14 @@ async function display_goods() {
 
         $("#goods_row").append(`
         <div class="col">
-            <div class="card" style="width: 20rem;">
+            <div class="card" style="width: 20rem;border-radius: 16px;">
                 <img class="card-img-top" src="${all_goods[good]["image_uri"]}"
                     alt="Card image cap">
-                <div class="card-block">
+                <div class="card-block" style="text-align: center;">
                     <h4 class="card-title">${all_goods[good]["name"]}</h4>
-                    <p class="card-text">Price: ${all_goods[good]["token_amount"] / (10**18)}</p>
+                    <p class="card-text"  style="font-size: 20px;font-weight: 800;">Price: ${all_goods[good]["token_amount"] / (10**18)}</p>
                     <p class="card-text" id="waiting${all_goods[good]["id"]}">${waiting}</p>
-                    <a href="#" data-name="${all_goods[good]["name"]}" data-goodid="${all_goods[good]["id"]}" data-price="${all_goods[good]["token_amount"]}" class="add-to-cart btn btn-primary">Request</a>
+                    <a href="#" data-name="${all_goods[good]["name"]}" data-goodid="${all_goods[good]["id"]}" data-price="${all_goods[good]["token_amount"]}" class="add-to-cart btn" style="background-color:#84A98C; color:white;width: 85%;">Request</a>
                 </div>
             </div>
         </div>

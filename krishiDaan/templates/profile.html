@@ -17,7 +17,7 @@
 
 {% block body %}
 
-    <div class="student-profile py-4" id="main_container">
+    <div class="student-profile py-4" id="main_container" style="background-color: #F5F5F5;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">
@@ -26,9 +26,9 @@
                             <img style="width: 80%;" class="profile_img" src="/media/images/krishicoin.png" alt="student dp">
                             <h3><span>Krishi Coin : </span><span id="balance_amount">0.00</span> KC</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="text-align: center;">
                             <p class="mb-0"><a style="cursor: pointer;" onclick="refresh_balance()">Refresh Balance <i class="fa fa-fw fa-history" aria-hidden="true"></i></a></p>
-                            <button type="button" class="btn" style="background-color: #F0BB62;color:white" data-toggle="modal" data-target="#exampleModal">
+                            <button type="button" class="btn" style="background-color: #84A98C;;color:white" data-toggle="modal" data-target="#exampleModal">
                                         Get Coins
                                       </button>
                         </div>
@@ -46,7 +46,7 @@
                 <div class="col-lg-8">
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><i class="fa fa-clone pr-1"></i>Account Information</h3>
+                            <h3 class="mb-0" style="color: #2F3E46;"><i class="fa fa-clone pr-1"></i>Account Information</h3>
                         </div>
                         <div class="card-body pt-0">
                             <table class="table table-bordered">
@@ -72,14 +72,13 @@
                     <div style="height: 26px"></div>
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><i class="fa fa-clone pr-1"></i>Buy Tokens</h3>
+                            <h3 class="mb-0" style="color: #2F3E46;"><i class="fa fa-clone pr-1"></i>Buy Tokens</h3>
                         </div>
                         <div class="card-body pt-0">
 
                             <div class="route" id="buy"></div>
                             <section class="giftcard">
                                 <section class="giftcard-cover">
-                                    <i class="fa fa-apple"></i>
                                 </section>
                                 <div class="giftcard-content">
                                     <h2>Your tokens are purchased</h2>
@@ -90,12 +89,13 @@
                                 </div>
                                 <footer class="giftcard-footer">
                                     <div class="giftcard-text">
-                                        <h1>Krishi Coins</h1>
-                                        <input type="text" name="donate_coins" id="donate_coins" placeholder="Enter number of coins">
+                                        <h1 style="color: #84A98C;">Krishi Coins</h1>
+                                        <input type="text" name="donate_coins" id="donate_coins" placeholder="Enter number of coins" style="border-radius: 5px;
+                                        border: 0.1px solid black;">
                                     </div>
                                     <div class="ribbon">
                                         <div class="giftwrap">
-                                            <a href="javascript:void(0);" onclick="place_donation()" class="button">Donate Coins</a>
+                                            <a href="javascript:void(0);" style="background-color: #84A98C;" onclick="place_donation()" class="button">Donate Coins</a>
                                         </div>
                                         <div class="bow">
                                             <i class="fa fa-bookmark"></i>
@@ -121,13 +121,13 @@
                     <div style="height: 26px"></div>
                     <div class="card shadow-sm">
                         <div class="card-header bg-transparent border-0">
-                            <h3 class="mb-0"><i class="fa fa-clone pr-1"></i>Donations Made</h3>
+                            <h3 class="mb-0" style="color: #2F3E46;"><i class="fa fa-clone pr-1"></i>Donations Made</h3>
                         </div>
                         <div class="card-body pt-0">
                             <table id="donations_table">
                                 <tr>
                                     <th>Order #</th>
-                                    <th>ITEM IDs</th>
+                                    <th>Item IDs</th>
                                     <th>Quantities</th>
                                     <th>Total Amount</th>
                                 </tr>

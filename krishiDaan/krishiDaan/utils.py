@@ -5,6 +5,8 @@ import requests
 from web3.middleware import geth_poa_middleware
 from web3 import Web3
 from dotenv import load_dotenv
+from django.core.files.storage import default_storage
+from pathlib import Path
 
 load_dotenv()
 
@@ -34,7 +36,27 @@ def upload_to_ipfs(_image):
 
     # upload
     response = requests.post(ipfs_url + end_point, files={"file": _image})
-    ipfs_hash = response.json()["Hash"]
-    image_uri = f"https://ipfs.io/ipfs/{ipfs_hash}?filename={_image}"
-    print(image_uri)
+    image_uri = pin_to_pinata(_image)
     return image_uri
+
+
+def pin_to_pinata(_image):
+    default_storage.save(str(_image), _image)
+    file_path = default_storage.path(str(_image))
+    PINATA_BASE_URL = "https://api.pinata.cloud/"
+    endpoint = "pinning/pinFileToIPFS"
+    filename = str(_image)
+    headers = {
+        "pinata_api_key": os.getenv("PINATA_API_KEY"),
+        "pinata_secret_api_key": os.getenv("PINATA_API_SECRET"),
+    }
+    with Path(file_path).open("rb") as fp:
+        image_binary = fp.read()
+        response = requests.post(
+            PINATA_BASE_URL + endpoint,
+            files={"file": (filename, image_binary)},
+            headers=headers,
+        )
+        default_storage.delete(filename)
+        img_uri = "https://gateway.pinata.cloud/ipfs/" + response.json()["IpfsHash"]
+        return img_uri

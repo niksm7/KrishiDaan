@@ -34,10 +34,7 @@
   align-items: center;
   z-index: 2;
   background-repeat: no-repeat;
-}
-.giftcard-cover > .fa-apple {
-  color: white;
-  font-size: 6rem;
+  background-position: center center;
 }
 
 .giftcard-content {

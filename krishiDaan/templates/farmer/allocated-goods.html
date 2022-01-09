@@ -12,20 +12,20 @@
     <link rel="stylesheet" href="/media/css/shop.css">
 </head>
 
-<body>
+<body style="background-color: #F5F5F5;">
     <!-- Nav -->
     <nav class="navbar bg-inverse fixed-top bg-faded" style="background-color: #364E51 !important;">
         <div class="row">
             <a class="navbar-brand" style="padding:0px !important" href="/"><img style="width: 80px;" src="/media/images/main-logo.png" alt=""></a>
             <a style="color: white;" class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            <a style="color: white;" class="nav-link" href="/request/">Request<span class="sr-only">(current)</span></a>
-            <a style="color: white;" class="nav-link" href="/allocations/">All Allocations</a>
+            <a style="color: white;" class="nav-link" href="/shop/">Shop <span class="sr-only">(current)</span></a>
+            <a style="color: white;" class="nav-link" href="/profile/">Profile</a>
             {% if request.session.uid %}
             <a style="color: white;" class="nav-link ml-auto" href="/logout/">Logout</a>
             {% else %}
-            <a href="/loginpage/" class="clear-cart btn btn-success ml-auto">Login/SignUp</a>
+            <a href="/loginpage/" class="clear-cart btn ml-auto" style="background-color: #FFFFDD;color:black;margin-right:10px">Login/SignUp</a>
             {% endif %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cart">Cart (<span
+                <button type="button" class="btn"  style="background-color:#84A98C; color:white; margin-right:10px" data-toggle="modal" data-target="#cart">Cart (<span
                         class="total-count"></span>)</button>
                 <button class="clear-cart btn btn-danger">Clear
                     Cart</button>
@@ -36,83 +36,7 @@
     <br>
     <!-- Main -->
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/tractor.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Tractor</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/cow.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Cow</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/water.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Water</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/fertilizers.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Fertilizers</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/bullock-cart.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Bullock Cart</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card" style="width: 20rem;">
-                    <img class="card-img-top" src="/media/images/rice.png" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">Rice</h4>
-                        <dl>
-                            <dt><p class="card-text">Price: ₹20000</p></dt>
-                            <dd><p class="card-text">Qty Allocated: 2</p></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+        <div class="row" id="allocations_row">
 
         </div>
     </div>
@@ -156,7 +80,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
         integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="/media/js/shop.js"></script>
+    <script>
+        var farmer_address = {{farmer_address | safe}}
+    </script>
+    <script src="/media/js/allocated-goods.js"></script>
 </body>
 
 </html>

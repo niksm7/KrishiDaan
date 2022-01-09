@@ -162,13 +162,13 @@ async function display_goods() {
     for(var good in all_goods){
         $("#goods_row").append(`
         <div class="col">
-            <div class="card" style="width: 20rem;">
+            <div class="card" style="width: 20rem;border-radius: 16px;">
                 <img class="card-img-top" src="${all_goods[good]["image_uri"]}"
                     alt="Card image cap">
-                <div class="card-block">
+                <div class="card-block" style="text-align: center;">
                     <h4 class="card-title">${all_goods[good]["name"]}</h4>
-                    <p class="card-text">Price: ${all_goods[good]["token_amount"] / (10**18)}</p>
-                    <a href="#" data-name="${all_goods[good]["name"]}" data-goodid="${all_goods[good]["id"]}" data-price="${all_goods[good]["token_amount"]}" class="add-to-cart btn btn-primary">Add to
+                    <p class="card-text" style="font-size: 20px;font-weight: 800;">${all_goods[good]["token_amount"] / (10**18)} KC</p>
+                    <a href="#" data-name="${all_goods[good]["name"]}" data-goodid="${all_goods[good]["id"]}" data-price="${all_goods[good]["token_amount"]}" style="background-color:#84A98C; color:white;width: 85%;" class="add-to-cart btn ">Add to
                         cart</a>
                 </div>
             </div>
