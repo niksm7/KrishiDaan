@@ -121,7 +121,7 @@ function getTokens() {
         url: "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=INR&tsyms=ETH",
         dataType: "json",
         success: function (data) {
-            amount_tobe_payed = (data.RAW.INR.ETH.OPEN24HOUR * token_count_rs).toFixed(18);
+            amount_tobe_payed = ((data.RAW.INR.ETH.OPEN24HOUR * token_count_rs)).toFixed(18);
             tx = send(token_contract.methods.payUser(), web.utils.toWei(amount_tobe_payed, "ether"))
         }
     });
@@ -133,7 +133,7 @@ async function refresh_account(){
 
     all_donations = await operations_contract.methods.get_donor_donations(current_user_account).call()
 
-    $("#balance_amount").text(curr_balance / (10**18))
+    $("#balance_amount").text(Math.round(curr_balance / (10**18)))
     $("#donated_amount").text(donated_amount / (10**18))
 
     for(var donation in all_donations){
